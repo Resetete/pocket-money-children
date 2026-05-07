@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐸 Mein Sparschwein</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- WELCOME / LOGIN SCREEN -->
+<div id="screen-welcome" class="screen active">
+  <div class="frog-hero" id="hero-frog">🐸</div>
+  <div class="app-title">Mein Sparschwein</div>
+  <div class="app-subtitle">Dein grüner Geld-Freund 🌿</div>
+
+  <div class="login-card">
+    <div class="login-who">
+      <button class="login-btn child active" onclick="selectLoginType('child')" id="btn-child">
+        <span class="login-icon">🧒</span>
+        Ich bin das Kind
+      </button>
+      <button class="login-btn parent" onclick="selectLoginType('parent')" id="btn-parent">
+        <span class="login-icon">👨‍👩‍👧</span>
+        Ich bin Elternteil
+      </button>
+    </div>
+
+    <div id="child-hint" class="child-pw-hint">
+      👋 Kein Passwort nötig! Klick einfach auf Einloggen.
+    </div>
+
+    <div id="pw-group" style="display:none;">
+      <label class="pw-label">Eltern-Passwort</label>
+      <div class="pw-field-wrap">
+        <input type="password" id="pw-input" placeholder="Passwort eingeben…"
+          onkeydown="if(event.key==='Enter') tryLogin()">
+        <button class="pw-toggle" onclick="togglePw()">👁</button>
+      </div>
+    </div>
+
+    <div id="first-time-notice" style="display:none;">
+      <div class="child-pw-hint" style="background:#FFF8E1;border-color:var(--yellow);color:#7A5800;margin-top:0.75rem;">
+        🔑 Beim ersten Start: Passwort selbst festlegen! Dein erstes eingegebenes Passwort wird gespeichert.
+      </div>
+    </div>
+
+    <div class="error-msg" id="login-error"></div>
+    <button class="btn-main" id="login-btn-main" onclick="tryLogin()">🐸 Los geht's!</button>
+  </div>
+</div>
+
+<!-- CHILD SCREEN -->
+<div id="screen-child" class="screen">
+  <div class="app-header">
+    <div>
+      <div class="app-header-name" id="child-greeting">Hallo! 👋</div>
+      <div class="app-header-sub" id="today-date"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:0.75rem;">
+      <div class="avatar-wrap" title="Dein Tier">
+        <div class="avatar" id="child-avatar">🐸</div>
+      </div>
+      <button class="logout-btn" onclick="logout()">Tschüss</button>
+    </div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <button class="tab active" onclick="switchTab('overview')" id="tab-overview">
+      <span class="tab-icon">🏠</span> Home
+    </button>
+    <button class="tab" onclick="switchTab('save')" id="tab-save">
+      <span class="tab-icon">💙</span> Sparen
+    </button>
+    <button class="tab" onclick="switchTab('history')" id="tab-history">
+      <span class="tab-icon">📋</span> Verlauf
+    </button>
+  </div>
+
+  <!-- OVERVIEW TAB -->
+  <div class="tab-content active" id="tab-content-overview">
+    <div class="total-card">
+      <div class="total-label">Mein gesamtes Geld 💰</div>
+      <div class="total-amount" id="child-total">0,00 €</div>
+      <div class="total-sub" id="child-total-sub">Ausgeben + Sparen + Investieren</div>
+    </div>
+
+    <div class="buckets-grid">
+      <div class="bucket-card spend">
+        <div class="bucket-icon">🛍️</div>
+        <div class="bucket-name">Ausgeben</div>
+        <div class="bucket-amount spend" id="bucket-spend">0,00 €</div>
+      </div>
+      <div class="bucket-card save">
+        <div class="bucket-icon">🎯</div>
+        <div class="bucket-name">Sparen</div>
+        <div class="bucket-amount save" id="bucket-save">0,00 €</div>
+      </div>
+      <div class="bucket-card invest">
+        <div class="bucket-icon">🌱</div>
+        <div class="bucket-name">Investieren</div>
+        <div class="bucket-amount invest" id="bucket-invest">0,00 €</div>
+      </div>
+    </div>
+
+    <div id="next-payout-wrap"></div>
+
+    <div class="section-header">⚡ Letzte Bewegungen</div>
+    <div class="tx-list" id="tx-list-recent">
+      <div class="empty-state"><div class="empty-icon">🐣</div>Noch keine Einträge</div>
+    </div>
+  </div>
+
+  <!-- SAVE TAB -->
+  <div class="tab-content" id="tab-content-save">
+    <div class="section-header">🎯 Mein Sparziel</div>
+    <div id="save-goal-display"></div>
+
+    <div class="section-header">🌱 Mein Investitions-Topf</div>
+    <div class="invest-card">
+      <div class="invest-card-title">Langzeit-Sparer</div>
+      <div class="invest-amount" id="invest-display">0,00 €</div>
+      <div class="invest-bonus" id="invest-bonus-info">
+        <span>🎁 Eltern zahlen Bonus dazu!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY TAB -->
+  <div class="tab-content" id="tab-content-history">
+    <div class="section-header">📋 Alle Transaktionen</div>
+    <div class="tx-list" id="tx-list-all">
+      <div class="empty-state"><div class="empty-icon">🐣</div>Noch keine Einträge</div>
+    </div>
+  </div>
+
+  <button class="fab" onclick="openAddTx()" title="Neue Transaktion">+</button>
+</div>
+
+<!-- PARENT SCREEN -->
+<div id="screen-parent" class="screen">
+  <div class="app-header">
+    <div>
+      <div class="app-header-name">Eltern-Bereich 👨‍👩‍👧</div>
+      <div class="app-header-sub">Einstellungen & Verwaltung</div>
+    </div>
+    <button class="logout-btn" onclick="logout()">Tschüss</button>
+  </div>
+
+  <!-- Child Name & Avatar -->
+  <div class="settings-card">
+    <div class="settings-card-title">🧒 Kind-Profil</div>
+    <div class="settings-row">
+      <label>Name des Kindes</label>
+      <input type="text" class="form-input" id="p-child-name" placeholder="z.B. Lena" onchange="saveSettings()">
+    </div>
+    <div class="settings-row">
+      <label>Tier-Avatar</label>
+      <select class="form-input" id="p-avatar" onchange="saveSettings()">
+        <option value="🐸">🐸 Frosch</option>
+        <option value="🐼">🐼 Panda</option>
+        <option value="🦊">🦊 Fuchs</option>
+        <option value="🐨">🐨 Koala</option>
+        <option value="🐰">🐰 Hase</option>
+        <option value="🐱">🐱 Katze</option>
+        <option value="🐶">🐶 Hund</option>
+        <option value="🐻">🐻 Bär</option>
+        <option value="🦁">🦁 Löwe</option>
+        <option value="🐯">🐯 Tiger</option>
+        <option value="🦄">🦄 Einhorn</option>
+        <option value="🐙">🐙 Tintenfisch</option>
+      </select>
+    </div>
+    <div class="settings-row">
+      <label>Eltern-Passwort ändern</label>
+      <button class="io-btn" onclick="openChangePw()" style="max-width:140px;padding:0.5rem 0.75rem;font-size:0.85rem;">🔑 Ändern</button>
+    </div>
+  </div>
+
+  <!-- Allowance Settings -->
+  <div class="settings-card">
+    <div class="settings-card-title">💰 Taschengeld</div>
+    <div class="settings-row">
+      <label>Betrag pro Zahlung</label>
+      <input type="number" class="form-input" id="p-allowance-amount" placeholder="0.00" min="0" step="0.50" onchange="saveSettings()">
+    </div>
+    <div class="settings-row">
+      <label>Auszahlungs-Rhythmus</label>
+      <select class="form-input" id="p-allowance-freq" onchange="saveSettings()">
+        <option value="weekly">Wöchentlich</option>
+        <option value="biweekly">Alle 2 Wochen</option>
+        <option value="monthly">Monatlich</option>
+      </select>
+    </div>
+    <div class="settings-row">
+      <label>Verteilung (%)</label>
+      <button class="io-btn" onclick="openSplitModal()" style="max-width:140px;padding:0.5rem 0.75rem;font-size:0.85rem;">⚙️ Verteilen</button>
+    </div>
+    <div id="split-display-parent" class="split-display"></div>
+    <div class="settings-row" style="margin-top:0.75rem;">
+      <label>Nächste Auszahlung</label>
+      <span id="p-next-payout" style="font-weight:700;color:var(--green-dark);">–</span>
+    </div>
+    <button class="btn-main yellow" onclick="payAllowance()" style="margin-top:0.75rem;">
+      💸 Taschengeld jetzt auszahlen
+    </button>
+  </div>
+
+  <!-- Savings Goal -->
+  <div class="settings-card">
+    <div class="settings-card-title">🎯 Sparziel festlegen</div>
+    <div class="settings-row">
+      <label>Ziel-Name</label>
+      <input type="text" class="form-input" id="p-goal-name" placeholder="z.B. Nintendo Switch" onchange="saveSettings()">
+    </div>
+    <div class="settings-row">
+      <label>Zielbetrag (€)</label>
+      <input type="number" class="form-input" id="p-goal-amount" placeholder="0.00" min="0" step="1" onchange="saveSettings()">
+    </div>
+    <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:0.5rem;">
+      <label>Foto des Ziels</label>
+      <div id="p-goal-photo-area">
+        <div class="photo-upload-area" onclick="document.getElementById('goal-photo-input').click()">
+          📸 Foto auswählen
+          <div style="font-size:0.75rem;color:var(--text-soft);margin-top:0.3rem;">optional</div>
+        </div>
+      </div>
+      <input type="file" id="goal-photo-input" accept="image/*" style="display:none" onchange="handleGoalPhoto(this)">
+    </div>
+  </div>
+
+  <!-- Invest Settings -->
+  <div class="settings-card">
+    <div class="settings-card-title">🌱 Investitions-Bonus</div>
+    <div class="settings-row">
+      <label>Bonus-Prozentsatz (%)</label>
+      <input type="number" class="form-input" id="p-invest-bonus" placeholder="10" min="0" max="100" step="1" onchange="saveSettings()">
+    </div>
+    <div class="settings-row">
+      <label>Rhythmus</label>
+      <select class="form-input" id="p-invest-freq" onchange="saveSettings()">
+        <option value="monthly">Monatlich</option>
+        <option value="quarterly">Vierteljährlich</option>
+      </select>
+    </div>
+    <button class="btn-main" onclick="payInvestBonus()" style="margin-top:0.75rem;">
+      🌱 Bonus jetzt gutschreiben
+    </button>
+  </div>
+
+  <!-- Manual Transaction -->
+  <div class="settings-card">
+    <div class="settings-card-title">✏️ Transaktion eintragen</div>
+    <button class="btn-main" onclick="openAddTx()" style="background:var(--purple);">
+      ➕ Neue Buchung
+    </button>
+  </div>
+
+  <!-- Import / Export -->
+  <div class="settings-card">
+    <div class="settings-card-title">📦 Daten sichern</div>
+    <div class="io-buttons">
+      <button class="io-btn" onclick="exportData()">📤 Exportieren</button>
+      <label class="io-btn" style="cursor:pointer;">
+        📥 Importieren
+        <input type="file" accept=".json" style="display:none" onchange="importData(this)">
+      </label>
+    </div>
+    <div style="font-size:0.75rem;color:var(--text-soft);margin-top:0.5rem;text-align:center;">
+      Daten werden auch automatisch im Browser gespeichert.
+    </div>
+  </div>
+
+  <!-- Reset -->
+  <div class="settings-card" style="border-color:rgba(229,62,62,0.2);">
+    <div class="settings-card-title" style="color:#C53030;">⚠️ Zurücksetzen</div>
+    <button class="btn-main" onclick="confirmReset()"
+      style="background:#FF6B6B;box-shadow:0 4px 12px rgba(255,107,107,0.4);">
+      🗑️ Alle Daten löschen
+    </button>
+  </div>
+</div>
+
+<!-- ADD TRANSACTION MODAL -->
+<div class="modal-overlay" id="modal-addtx">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title"><span id="addtx-title-icon">➕</span> Neue Buchung</div>
+
+    <div class="type-toggle" id="tx-type-toggle">
+      <button onclick="setTxType('income')" id="btn-income" class="active-income">+ Einnahme</button>
+      <button onclick="setTxType('expense')" id="btn-expense">− Ausgabe</button>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Betrag (€)</label>
+      <input type="number" class="form-input" id="tx-amount" placeholder="0.00" min="0" step="0.01">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Beschreibung</label>
+      <input type="text" class="form-input" id="tx-desc" placeholder="z.B. Geburtstagsgeld von Oma 🎂">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Geldbeutel</label>
+      <select class="form-input" id="tx-bucket">
+        <option value="spend">🛍️ Ausgeben (sofort)</option>
+        <option value="save">🎯 Sparen</option>
+        <option value="invest">🌱 Investieren</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Emoji (optional)</label>
+      <input type="text" class="form-input" id="tx-emoji" placeholder="🎁" maxlength="4">
+    </div>
+
+    <div style="display:flex;gap:0.75rem;margin-top:0.5rem;">
+      <button class="btn-main" style="flex:1;background:#EEE;color:var(--text);box-shadow:none;" onclick="closeModal('modal-addtx')">Abbrechen</button>
+      <button class="btn-main" style="flex:2;" onclick="addTransaction()">💾 Speichern</button>
+    </div>
+  </div>
+</div>
+
+<!-- SPLIT MODAL -->
+<div class="modal-overlay" id="modal-split">
+  <div class="modal center">
+    <div class="modal-title">⚙️ Taschengeld verteilen</div>
+    <p style="font-size:0.85rem;color:var(--text-soft);margin-bottom:1rem;font-weight:600;">
+      Wie soll das Taschengeld aufgeteilt werden? (Summe muss 100% ergeben)
+    </p>
+    <div class="form-group">
+      <label class="form-label">🛍️ Ausgeben (%)</label>
+      <input type="number" class="form-input" id="split-spend" value="60" min="0" max="100" onchange="updateSplitPreview()">
+    </div>
+    <div class="form-group">
+      <label class="form-label">🎯 Sparen (%)</label>
+      <input type="number" class="form-input" id="split-save" value="30" min="0" max="100" onchange="updateSplitPreview()">
+    </div>
+    <div class="form-group">
+      <label class="form-label">🌱 Investieren (%)</label>
+      <input type="number" class="form-input" id="split-invest" value="10" min="0" max="100" onchange="updateSplitPreview()">
+    </div>
+    <div id="split-sum-msg" style="font-weight:700;margin-bottom:0.75rem;font-size:0.9rem;color:var(--green-dark);">✅ Summe: 100%</div>
+    <div style="display:flex;gap:0.75rem;">
+      <button class="btn-main" style="flex:1;background:#EEE;color:var(--text);box-shadow:none;" onclick="closeModal('modal-split')">Abbrechen</button>
+      <button class="btn-main" style="flex:2;" onclick="saveSplit()">✅ Speichern</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHANGE PW MODAL -->
+<div class="modal-overlay" id="modal-changepw">
+  <div class="modal center">
+    <div class="modal-title">🔑 Passwort ändern</div>
+    <div class="form-group">
+      <label class="form-label">Altes Passwort</label>
+      <div class="pw-field-wrap">
+        <input type="password" class="form-input" id="old-pw" placeholder="Altes Passwort">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Neues Passwort</label>
+      <div class="pw-field-wrap">
+        <input type="password" class="form-input" id="new-pw" placeholder="Neues Passwort (min. 4 Zeichen)">
+      </div>
+    </div>
+    <div class="error-msg" id="pw-change-error"></div>
+    <div style="display:flex;gap:0.75rem;margin-top:0.5rem;">
+      <button class="btn-main" style="flex:1;background:#EEE;color:var(--text);box-shadow:none;" onclick="closeModal('modal-changepw')">Abbrechen</button>
+      <button class="btn-main" style="flex:2;" onclick="changePassword()">🔑 Ändern</button>
+    </div>
+  </div>
+</div>
+
+<!-- COIN RAIN CONTAINER -->
+<div class="coin-rain" id="coin-rain" style="pointer-events:none;"></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
