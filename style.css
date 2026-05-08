@@ -520,6 +520,66 @@
   .split-pill.save { background: var(--blue-light); color: var(--blue); }
   .split-pill.invest { background: #EDE8F8; color: var(--purple); }
 
+  /* ===== CHILD PICKER (login) ===== */
+  .child-pick-btn {
+    padding: 0.75rem 0.5rem;
+    border-radius: var(--radius-sm);
+    border: 2.5px solid rgba(76,175,130,0.2);
+    background: var(--green-light);
+    cursor: pointer; transition: all 0.2s;
+    color: var(--green-dark); text-align: center;
+  }
+  .child-pick-btn:hover { border-color: var(--green); transform: scale(1.04); }
+  .child-pick-btn.active { border-color: var(--green); background: var(--green); color: white;
+    box-shadow: 0 4px 12px rgba(76,175,130,0.35); }
+
+  /* ===== PARENT CHILD TABS ===== */
+  .p-child-tabs-wrap {
+    display: flex; gap: 0.5rem; flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  .p-child-tab {
+    padding: 0.6rem 1rem;
+    border-radius: 50px;
+    border: 2px solid rgba(76,175,130,0.25);
+    background: var(--card);
+    font-family: 'Baloo 2', cursive; font-size: 0.9rem; font-weight: 700;
+    color: var(--text-soft); cursor: pointer; transition: all 0.2s;
+  }
+  .p-child-tab:hover { border-color: var(--green); color: var(--green-dark); background: var(--green-light); }
+  .p-child-tab.active { background: var(--green); color: white; border-color: var(--green);
+    box-shadow: 0 3px 10px rgba(76,175,130,0.35); }
+  .p-add-child-btn { border-style: dashed; color: var(--green-dark); background: var(--green-light); }
+  .p-add-child-btn:hover { background: var(--green); color: white; border-style: solid; }
+
+  /* ===== EMOJI PICKER ===== */
+  .emoji-picker {
+    display: flex; flex-wrap: wrap; gap: 0.3rem;
+    background: var(--green-light);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem;
+    border: 1.5px solid rgba(76,175,130,0.2);
+  }
+  .emoji-opt {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    border: none; background: none; cursor: pointer;
+    border-radius: 8px; transition: all 0.15s;
+  }
+  .emoji-opt:hover { background: white; transform: scale(1.2); box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+
+  /* ===== TX EDIT BUTTONS ===== */
+  .tx-edit-btn {
+    background: none; border: 1.5px solid rgba(76,175,130,0.2);
+    border-radius: 8px; width: 30px; height: 30px;
+    font-size: 0.85rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; flex-shrink: 0;
+  }
+  .tx-edit-btn:hover { background: var(--green-light); border-color: var(--green); transform: scale(1.1); }
+  .tx-delete-btn:hover { background: #FFE5E5; border-color: #FF6B6B; }
+
   @media (max-width: 380px) {
     .app-title { font-size: 2.2rem; }
     .total-amount { font-size: 2.4rem; }
