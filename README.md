@@ -1,9 +1,11 @@
 🐸 Mein Sparschwein - pocket-money-children
 
 A playful, mobile-first pocket money app for kids and parents — built as a single offline-capable web app with no backend required.
-What it does
+
+## What it does
 Mein Sparschwein helps families manage children's pocket money through a simple two-role system: kids get a fun, emoji-rich view of their money, while parents get a full control panel behind a password.
 Money is automatically split across three buckets — Ausgeben (spend), Sparen (save), and Investieren (invest) — teaching children the basics of budgeting from an early age.
+It's available in English, German and Portuguese.
 
 ## Features
 
