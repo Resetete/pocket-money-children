@@ -585,3 +585,129 @@
     .total-amount { font-size: 2.4rem; }
     .buckets-grid { gap: 0.5rem; }
   }
+
+  /* ===== DESKTOP STYLES (768px+) ===== */
+  @media (min-width: 768px) {
+
+    body {
+      background-image:
+        radial-gradient(circle at 5% 15%, rgba(76,175,130,0.12) 0%, transparent 40%),
+        radial-gradient(circle at 95% 85%, rgba(255,209,102,0.14) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(155,133,212,0.05) 0%, transparent 60%);
+    }
+
+    /* ---- WELCOME SCREEN ---- */
+    #screen-welcome {
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 4rem;
+      padding: 3rem;
+    }
+
+    .welcome-left {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      max-width: 380px;
+    }
+
+    .frog-hero { font-size: 9rem; margin-bottom: 1.5rem; }
+    .app-title { font-size: 3.5rem; }
+    .app-subtitle { font-size: 1.2rem; margin-bottom: 0; }
+
+    .login-card {
+      width: 420px;
+      max-width: 420px;
+      padding: 2.5rem;
+      border-radius: 28px;
+      box-shadow: 0 12px 48px rgba(76,175,130,0.18);
+    }
+
+    /* ---- CHILD & PARENT SCREENS: centered with max-width ---- */
+    #screen-child,
+    #screen-parent {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2rem 2.5rem 5rem;
+    }
+
+    /* ---- CHILD SCREEN ---- */
+    #screen-child .app-header { padding: 1.5rem 0 1rem; }
+    #screen-child .app-header-name { font-size: 1.8rem; }
+
+    /* Tab bar: slightly wider */
+    #screen-child .tab-bar { max-width: 100%; }
+
+    /* Overview: total card full width, then buckets in 3-col as usual */
+    #screen-child .total-card { padding: 2rem; }
+    #screen-child .total-amount { font-size: 3.4rem; }
+
+    /* Buckets stay as 3-column row — no changes needed */
+
+    /* Widen save/invest/history tab content */
+    .goal-card { padding: 1.5rem; }
+    .goal-img, .goal-img-placeholder { width: 72px; height: 72px; }
+    .goal-name { font-size: 1.1rem; }
+    .invest-card { padding: 1.5rem; }
+    .invest-amount { font-size: 2.4rem; }
+
+    /* TX list */
+    .tx-item { padding: 0.9rem 1.25rem; }
+    .tx-desc { font-size: 0.95rem; }
+
+    /* Section headers */
+    .section-header { font-size: 1.2rem; margin: 1.5rem 0 0.85rem; }
+
+    /* FAB: anchor to content area */
+    .fab {
+      right: calc(50% - 430px + 1.5rem);
+      bottom: 2.5rem;
+      width: 64px; height: 64px;
+      font-size: 2.2rem;
+    }
+
+    /* ---- PARENT SCREEN ---- */
+    #screen-parent .app-header { padding: 1.5rem 0 1rem; }
+    #screen-parent .app-header-name { font-size: 1.8rem; }
+
+    .p-child-tabs-wrap { margin-bottom: 1.25rem; }
+    .p-child-tab { font-size: 1rem; padding: 0.65rem 1.25rem; }
+
+    /* Two-column settings grid */
+    .parent-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .parent-grid .settings-card { margin-bottom: 0; }
+    .parent-grid .settings-card.full-width { grid-column: 1 / -1; }
+
+    .settings-row { padding: 0.75rem 0; }
+
+    /* ---- MODALS: centered on desktop ---- */
+    .modal-overlay {
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal {
+      border-radius: 24px;
+      max-width: 520px;
+      max-height: 85vh;
+      animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    .modal-handle { display: none; }
+  }
+
+  /* ---- LARGE DESKTOP (1100px+) ---- */
+  @media (min-width: 1100px) {
+    #screen-child,
+    #screen-parent { max-width: 980px; padding: 2rem 3rem 5rem; }
+
+    .fab { right: calc(50% - 490px + 2rem); }
+  }
