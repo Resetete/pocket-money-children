@@ -520,6 +520,31 @@
   .split-pill.save { background: var(--blue-light); color: var(--blue); }
   .split-pill.invest { background: #EDE8F8; color: var(--purple); }
 
+  /* ===== LANGUAGE SWITCHER ===== */
+  .lang-switcher {
+    display: flex; gap: 0.4rem; justify-content: flex-end;
+    margin-bottom: 1rem;
+  }
+  .lang-switcher-sm { margin-bottom: 0; }
+  .lang-btn {
+    padding: 0.3rem 0.65rem;
+    border-radius: 50px;
+    border: 2px solid rgba(76,175,130,0.25);
+    background: transparent;
+    font-family: 'Nunito', sans-serif; font-size: 0.78rem; font-weight: 700;
+    color: var(--text-soft); cursor: pointer; transition: all 0.2s;
+  }
+  .lang-btn:hover { background: var(--green-light); border-color: var(--green); color: var(--green-dark); }
+  .lang-btn.active { background: var(--green); border-color: var(--green); color: white; }
+
+  /* ===== SMOOTH THEME TRANSITIONS ===== */
+  :root {
+    transition: --green 0.4s, --green-dark 0.4s, --green-light 0.4s, --bg 0.4s;
+  }
+  body, .total-card, .invest-card, .btn-main, .fab, .tab.active {
+    transition: background 0.4s ease, background-color 0.4s ease, box-shadow 0.4s ease;
+  }
+
   /* ===== CHILD PICKER (login) ===== */
   .child-pick-btn {
     padding: 0.75rem 0.5rem;
