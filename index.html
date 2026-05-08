@@ -27,6 +27,9 @@
       </button>
     </div>
 
+    <!-- Child selector (multi-child) -->
+    <div id="child-selector-wrap"></div>
+
     <div id="child-hint" class="child-pw-hint">
       👋 Kein Passwort nötig! Klick einfach auf Einloggen.
     </div>
@@ -66,7 +69,6 @@
     </div>
   </div>
 
-  <!-- Tab Bar -->
   <div class="tab-bar">
     <button class="tab active" onclick="switchTab('overview')" id="tab-overview">
       <span class="tab-icon">🏠</span> Home
@@ -86,7 +88,6 @@
       <div class="total-amount" id="child-total">0,00 €</div>
       <div class="total-sub" id="child-total-sub">Ausgeben + Sparen + Investieren</div>
     </div>
-
     <div class="buckets-grid">
       <div class="bucket-card spend">
         <div class="bucket-icon">🛍️</div>
@@ -104,9 +105,7 @@
         <div class="bucket-amount invest" id="bucket-invest">0,00 €</div>
       </div>
     </div>
-
     <div id="next-payout-wrap"></div>
-
     <div class="section-header">⚡ Letzte Bewegungen</div>
     <div class="tx-list" id="tx-list-recent">
       <div class="empty-state"><div class="empty-icon">🐣</div>Noch keine Einträge</div>
@@ -117,7 +116,6 @@
   <div class="tab-content" id="tab-content-save">
     <div class="section-header">🎯 Mein Sparziel</div>
     <div id="save-goal-display"></div>
-
     <div class="section-header">🌱 Mein Investitions-Topf</div>
     <div class="invest-card">
       <div class="invest-card-title">Langzeit-Sparer</div>
@@ -149,7 +147,10 @@
     <button class="logout-btn" onclick="logout()">Tschüss</button>
   </div>
 
-  <!-- Child Name & Avatar -->
+  <!-- Child Tabs -->
+  <div id="p-child-tabs" class="p-child-tabs-wrap"></div>
+
+  <!-- Child Profile -->
   <div class="settings-card">
     <div class="settings-card-title">🧒 Kind-Profil</div>
     <div class="settings-row">
@@ -160,6 +161,7 @@
       <label>Tier-Avatar</label>
       <select class="form-input" id="p-avatar" onchange="saveSettings()">
         <option value="🐸">🐸 Frosch</option>
+        <option value="🐭">🐭 Maus</option>
         <option value="🐼">🐼 Panda</option>
         <option value="🦊">🦊 Fuchs</option>
         <option value="🐨">🐨 Koala</option>
@@ -177,9 +179,15 @@
       <label>Eltern-Passwort ändern</label>
       <button class="io-btn" onclick="openChangePw()" style="max-width:140px;padding:0.5rem 0.75rem;font-size:0.85rem;">🔑 Ändern</button>
     </div>
+    <div id="p-delete-child-btn" style="display:none;margin-top:0.75rem;">
+      <button class="btn-main" onclick="deleteCurrentChild()"
+        style="background:#FF6B6B;box-shadow:0 4px 12px rgba(255,107,107,0.4);margin-top:0;">
+        🗑️ Dieses Kind löschen
+      </button>
+    </div>
   </div>
 
-  <!-- Allowance Settings -->
+  <!-- Allowance -->
   <div class="settings-card">
     <div class="settings-card-title">💰 Taschengeld</div>
     <div class="settings-row">
@@ -231,7 +239,7 @@
     </div>
   </div>
 
-  <!-- Invest Settings -->
+  <!-- Invest -->
   <div class="settings-card">
     <div class="settings-card-title">🌱 Investitions-Bonus</div>
     <div class="settings-row">
@@ -250,12 +258,19 @@
     </button>
   </div>
 
-  <!-- Manual Transaction -->
+  <!-- Transactions (editable) -->
   <div class="settings-card">
-    <div class="settings-card-title">✏️ Transaktion eintragen</div>
-    <button class="btn-main" onclick="openAddTx()" style="background:var(--purple);">
+    <div class="settings-card-title">✏️ Buchungen verwalten</div>
+    <div style="margin-bottom:0.75rem;">
+      <div style="font-size:0.8rem;color:var(--text-soft);font-weight:600;margin-bottom:0.5rem;">Kontostand:</div>
+      <div id="p-balances-display" class="split-display"></div>
+    </div>
+    <button class="btn-main" onclick="openAddTx()" style="background:var(--purple);margin-bottom:0.75rem;">
       ➕ Neue Buchung
     </button>
+    <div class="tx-list" id="p-tx-list" style="max-height:400px;overflow-y:auto;">
+      <div class="empty-state"><div class="empty-icon">🐣</div>Noch keine Einträge</div>
+    </div>
   </div>
 
   <!-- Import / Export -->
@@ -283,11 +298,11 @@
   </div>
 </div>
 
-<!-- ADD TRANSACTION MODAL -->
+<!-- ADD / EDIT TRANSACTION MODAL -->
 <div class="modal-overlay" id="modal-addtx">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title"><span id="addtx-title-icon">➕</span> Neue Buchung</div>
+    <div class="modal-title"><span>✏️</span> <span id="addtx-modal-title">Neue Buchung</span></div>
 
     <div class="type-toggle" id="tx-type-toggle">
       <button onclick="setTxType('income')" id="btn-income" class="active-income">+ Einnahme</button>
@@ -314,8 +329,9 @@
     </div>
 
     <div class="form-group">
-      <label class="form-label">Emoji (optional)</label>
-      <input type="text" class="form-input" id="tx-emoji" placeholder="🎁" maxlength="4">
+      <label class="form-label">Emoji</label>
+      <input type="text" class="form-input" id="tx-emoji-input" placeholder="🎁" maxlength="4" style="margin-bottom:0.5rem;">
+      <div id="emoji-picker-wrap" class="emoji-picker"></div>
     </div>
 
     <div style="display:flex;gap:0.75rem;margin-top:0.5rem;">
@@ -376,9 +392,41 @@
   </div>
 </div>
 
-<!-- COIN RAIN CONTAINER -->
-<div class="coin-rain" id="coin-rain" style="pointer-events:none;"></div>
+<!-- ADD CHILD MODAL -->
+<div class="modal-overlay" id="modal-add-child">
+  <div class="modal center">
+    <div class="modal-title">🧒 Neues Kind hinzufügen</div>
+    <div class="form-group">
+      <label class="form-label">Name</label>
+      <input type="text" class="form-input" id="new-child-name" placeholder="z.B. Max">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Avatar</label>
+      <select class="form-input" id="new-child-avatar">
+        <option value="🐸">🐸 Frosch</option>
+        <option value="🐭">🐭 Maus</option>
+        <option value="🐼">🐼 Panda</option>
+        <option value="🦊">🦊 Fuchs</option>
+        <option value="🐨">🐨 Koala</option>
+        <option value="🐰">🐰 Hase</option>
+        <option value="🐱">🐱 Katze</option>
+        <option value="🐶">🐶 Hund</option>
+        <option value="🐻">🐻 Bär</option>
+        <option value="🦁">🦁 Löwe</option>
+        <option value="🐯">🐯 Tiger</option>
+        <option value="🦄">🦄 Einhorn</option>
+        <option value="🐙">🐙 Tintenfisch</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:0.75rem;margin-top:0.5rem;">
+      <button class="btn-main" style="flex:1;background:#EEE;color:var(--text);box-shadow:none;" onclick="closeModal('modal-add-child')">Abbrechen</button>
+      <button class="btn-main" style="flex:2;" onclick="addChild()">✅ Hinzufügen</button>
+    </div>
+  </div>
+</div>
 
+<!-- COIN RAIN -->
+<div class="coin-rain" id="coin-rain" style="pointer-events:none;"></div>
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
