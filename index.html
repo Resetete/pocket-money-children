@@ -11,9 +11,11 @@
 
 <!-- WELCOME / LOGIN SCREEN -->
 <div id="screen-welcome" class="screen active">
-  <div class="frog-hero" id="hero-frog">🐸</div>
-  <div class="app-title">Mein Sparschwein</div>
-  <div class="app-subtitle">Dein grüner Geld-Freund 🌿</div>
+  <div class="welcome-left">
+    <div class="frog-hero" id="hero-frog">🐸</div>
+    <div class="app-title">Mein Sparschwein</div>
+    <div class="app-subtitle">Dein grüner Geld-Freund 🌿</div>
+  </div>
 
   <div class="login-card">
     <div class="login-who">
@@ -150,6 +152,8 @@
   <!-- Child Tabs -->
   <div id="p-child-tabs" class="p-child-tabs-wrap"></div>
 
+  <div class="parent-grid">
+
   <!-- Child Profile -->
   <div class="settings-card">
     <div class="settings-card-title">🧒 Kind-Profil</div>
@@ -259,7 +263,7 @@
   </div>
 
   <!-- Transactions (editable) -->
-  <div class="settings-card">
+  <div class="settings-card full-width">
     <div class="settings-card-title">✏️ Buchungen verwalten</div>
     <div style="margin-bottom:0.75rem;">
       <div style="font-size:0.8rem;color:var(--text-soft);font-weight:600;margin-bottom:0.5rem;">Kontostand:</div>
@@ -296,6 +300,8 @@
       🗑️ Alle Daten löschen
     </button>
   </div>
+
+  </div><!-- end .parent-grid -->
 </div>
 
 <!-- ADD / EDIT TRANSACTION MODAL -->
